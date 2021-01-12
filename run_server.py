@@ -1,16 +1,18 @@
 import uvicorn
+
 from configparser import ConfigParser
-from app.core.config import settings
 
 
 def main():
     config = ConfigParser()
     config.read("./config.ini")
 
-    PORT = settings.SERVER_PORT
-    HOST = settings.SERVER_HOST
+    try:
+        PORT: int = int(config.get("default", "PORT"))
+    except Exception as e:
+        PORT: int = 5000
 
-    uvicorn.run("app.main:app", host=HOST, port=PORT, reload=True)
+    uvicorn.run("app.main:app", port=PORT, reload=True)
 
 
 if __name__ == "__main__":
